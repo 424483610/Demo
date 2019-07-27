@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style>
+  *{
+  margin:0px;
+  padding:0;
+  }
+  #myCanvas{
+  background:#000;
+  overflow:hidden;
+  }
+  </style>
+ </head>
+ <body>
+  <canvas id="myCanvas">你的浏览器不支持canvas标签</canvas>
+  <script>
+	gets();
+	//随机数
+	function random(min,max){
+		return Math.round(Math.random()*(max-min)+min);
+	  };
+	function gets(){
+			/**/
+		this.time = null;
+		this.init = true;
+		this.prosone = [];
+		this.myCanvas = document.getElementById("myCanvas");
+		this.W = window.innerWidth;
+		this.H = window.innerHeight;
+		this.ctx = myCanvas.getContext("2d");
+		myCanvas.width = this.W; 
+		myCanvas.height = this.H; 
+	};
+	function draw(sayName){
+		this.ctx.beginPath();//开始路径
+		this.ctx.arc(sayName.x,sayName.y,sayName.radius,0,Math.PI*2,true);
+		this.ctx.fillStyle = (0,"rgb("+sayName.r+","+sayName.g+","+sayName.b+")");
+		this.ctx.fill();	
+		this.ctx.closePath();
+	};
+	myCanvas.onmousemove = function(){
+		for (i=0;i<5;i++){
+		//圆的基本属性
+			var sayName = {
+				x : random(-5,5)+event.clientX,
+				y : random(-5,5)+event.clientY,
+				radius : random(30,50),
+				vx : Math.random()-0.9,
+				vy : Math.random()-0.9,
+				r : random(0,255),
+				g : random(0,255),
+				b : random(0,255),
+			};
+			//console.log(sayName.radius);
+			update();
+			prosone.push(sayName);
+		}
+	};
+		//更新圆的位置
+	function update(){
+		this.ctx.clearRect(0,0,this.W,this.H);
+		for(var i=0;i<prosone.length;i++){
+			//改变x轴y轴的位置
+			prosone[i].x += prosone[i].vx*1.5;
+			prosone[i].y += prosone[i].vy*1.5;
+			//让圆逐渐变小
+			prosone[i].radius = prosone[i].radius*0.99;
+			//prosone[i].r = 
+			prosone[i].index = i;
+			//当圆的半径小于3时，删除它，结束执行
+			if(prosone[i].radius<3){
+				prosone.splice(prosone[i].index,1);
+				continue;
+			};
+			draw(prosone[i]);
+		};
+	};
+	//同时只开启一个定时器
+		if(init){
+			clearInterval(time);
+			time = setInterval(update,1000/60);
+			init = false;
+		};
+		//console.log(init);
+  </script>
+ </body>
+</html>

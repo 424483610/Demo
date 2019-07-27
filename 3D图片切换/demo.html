@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3dÕº∆¨«–ªª-–°–‹√®</title>
+	<style>
+	*{
+		margin:0;
+		padding:0;
+	}
+	#box{
+		width:600px;
+		height:200px;
+		border:1px solid red;
+		margin:100px auto;
+		position:relative;
+	}
+	body{
+		perspective:1000px;
+	}
+	#box img{
+		width:600px;
+		height:200px;
+		position:absolute;
+		transform-style:preserve-3d;
+		transition:1s;
+	}
+	</style>
+</head>
+<body>
+	<div id="box">
+		<img src="images/timg (1).jpg" alt="">
+		<img src="images/timg (2).jpg" alt="">
+		<img src="images/timg (3).jpg" alt="">
+		<img src="images/timg (4).jpg" alt="">
+		<img src="images/timg (5).jpg" alt="">
+	</div>
+	<script>
+	var oimg = document.getElementsByTagName("img");
+	function tab(n){
+		for(var i=0;i<2;i++){
+			var left = n - 1 - i;
+			var right = n + 1 + i;
+			if(right>4){
+				right-=5;
+			}
+			if(left<0){
+				left+=5;
+			}
+			oimg[left].style.transform = 
+			`translateX(${-150*(i+1)}px) translateZ(${150-i*100}px)`;
+			oimg[left].style.zIndex = 3-i;
+			oimg[right].style.transform = 
+			`translateX(${150*(i+1)}px) translateZ(${150-i*100}px)`;
+			oimg[right].style.zIndex = 3-i;
+		};
+		oimg[n].style.transform = "translateZ(300px)";
+		oimg[n].style.zIndex = 10;
+	};
+	for(var i=0;i<oimg.length;i++){
+		oimg[i].index = i;
+		oimg[i].onclick = function(){
+			tab(this.index);
+			console.log(i);
+		};
+	};
+	tab(0);
+	/*document.addEventListener("click",function(e){
+		console.log(e);
+	},false);*/
+	</script>
+</body>
+</html>

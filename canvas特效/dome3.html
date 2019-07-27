@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style>
+  *{
+  margin:0px;
+  padding:0px;
+  }
+  #Mycanvas{
+  background:#000;
+  }
+  body{
+  overflow:hidden;
+  }
+  h1{
+  color:#fff;
+  }
+  </style>
+ </head>
+ <body>
+  <canvas id="Mycanvas">你的浏览器不支持canvas标签</canvas>
+  <script type="text/javascript">
+	var Mycanvas = document.getElementById("Mycanvas");
+	var say = [];
+	var time = null;
+	var init = true;
+	var WW = window.innerWidth;
+	var WH = window.innerHeight;
+	var ctx = Mycanvas.getContext("2d");
+	var color = ["pink","yellow","red","#fff","green","#3333ff","#ff0000","#660033","#ccff00","#9900ff"];
+	Mycanvas.width = WW;
+	Mycanvas.height = WH;
+	function random(min,max){
+		return Math.ceil(Math.random()*(max-min)+min);
+	}
+	function draw(boll){
+		ctx.beginPath();
+		ctx.arc(boll.x,boll.y,boll.radius,0,Math.PI*2,true);
+		ctx.fillStyle = boll.colors;
+		ctx.fill();
+	};
+	Mycanvas.onmousemove = function(ev){
+		for(var i=0;i<2;i++){
+			var boll = {
+			x : random(-5,5)+ev.clientX,
+			y : random(-5,5)+ev.clientY,
+			radius : random(20,45),
+			colors : color[random(0,color.length-1)],
+			vx : Math.random()-0.5,
+			vy : Math.random()-0.5,
+			};
+			say.push(boll);
+			if(say.length>100){
+				say.shift();
+			};
+		};
+		console.log(boll);
+		if(init==true){
+			clearInterval(time);
+			time = setInterval(stroke,30);
+			init = false;
+		};
+		function stroke(){
+			ctx.clearRect(0,0,WW,WH);
+			for(var i=0;i<say.length;i++){
+				say[i].x+=say[i].vx*8;
+				say[i].y+=say[i].vy*8;
+				say[i].radius = say[i].radius*0.94;
+				say[i].index = i;
+				if(say[i].radius<1){
+					say.splice(say[i].index,1);
+					continue;
+				};
+				draw(say[i]);
+				//console.log(say.length);
+			};
+
+		};
+	};
+  </script>
+ </body>
+</html>

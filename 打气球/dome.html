@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	*{
+		margin:0;
+		padding:0;
+	}
+	body{
+		background:#000;
+	}
+	.box{
+	  width:160px;
+	  height:160px;
+	  background:#ccff99;
+	  border-radius:160px 160px 64px 160px;
+	  transform:rotate(45deg);
+	  box-shadow:-8px -8px 80px #873540 inset;
+	  position:absolute;
+  }
+	</style>
+</head>
+<body>
+<script>
+//获取浏览器的宽高
+var W = window.innerWidth,
+	H = window.innerHeight;
+//生成气球
+function creator(num){
+	for(var i=0;i<num;i++){
+		var box = document.createElement("div");
+		box.className = "box";
+		document.body.appendChild(box);
+		box.style.top = H - 160 + "px";
+		box.style.left = Math.random()*(W-160) + 'px';
+		if(box.style.left<160){
+			box.style.left = 160 + "px";
+		};
+	};
+};
+//更新气球的位置
+function update(){
+	var balloon = document.querySelectorAll(".box");
+	for(var i=0;i<balloon.length;i++){
+		var speed = Math.random()*6 + 1;
+		balloon[i].style.top = balloon[i].offsetTop - speed + "px";
+		if(balloon[i].offsetTop<-160){
+			balloon[i].style.top = H + "px";
+		};
+	};
+};
+creator(5);
+setInterval(update,1000/60);
+//监听气球是否被点击
+document.addEventListener("click",function(e){
+	if(e.target.className === "box"){
+		boll.call(e.target);
+		creator(1);
+	}
+},false);
+//点击后气球做动画
+function boll(e){
+	var rotat = [30,90];
+	var index = 0;
+	index%=2;
+	setInterval(function(){
+		this.style.width = this.offsetWidth - 10 + "px";
+		this.style.height = this.offsetHeight - 10 + "px";
+		this.style.transform = "rotate("+rotat[index]+"deg)";
+	}.bind(this),1000/60);
+};
+</script>
+</body>
+</html>

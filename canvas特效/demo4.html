@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style>
+  *{
+  margin:0px;
+  padding:0px;
+  }
+  #canvas{
+	background:#000;
+  }
+  </style>
+ </head>
+ <body>
+  <canvas id="canvas">你的浏览器不支持cnavas标签</canvas>
+  <script>
+  var canvas = document.getElementById("canvas");
+	var W = window.innerWidth,
+		H = window.innerHeight;
+		canvas.width = W;
+		canvas.height = H;
+	var ctx = canvas.getContext("2d");
+	var person=[];
+	function random(max,min){
+		return Math.ceil(Math.random()*(max-min)+min);
+	};
+	function init(){
+		this.x = random(0,W);
+		this.y = random(0,H);
+		this.radius = random(3,4);
+		this.vx = random(-4,4);
+		this.vy = random(-4,4);
+		this.r = random(0,255);
+		this.g = random(0,255);
+		this.b = random(0,255);
+
+	};
+	for(var i=0;i<300;i++){
+		var s = new init();
+		person.push(s);
+	};
+	function deaw(){
+		ctx.fillStyle = "rgba(0,0,0,0.1)";
+		ctx.fillRect(0,0,W,H);
+		for(var i=0;i<person.length;i++){
+			ctx.fillStyle = "rgb("+person[i].r+","+person[i].g+","+person[i].b+")";
+			ctx.beginPath();
+			ctx.arc(person[i].x,person[i].y,person[i].radius,0,Math.PI*2,true);
+			ctx.fill();
+		}
+	};
+	function update(){
+		for(var i=0;i<person.length;i++){
+			person[i].x += person[i].vx;
+			person[i].y += person[i].vy;
+			if(person[i].x>W){
+			person[i].x=0;
+			console.log(person[i].x);
+			}
+			if(person[i].y>H){
+				person[i].y = 0;
+			}
+			if(person[i].x<0){
+				person[i].x=W;
+			}
+			if(person[i].y<0){
+				person[i].y=H;
+			}
+		}
+		deaw();
+	};
+	setInterval(update,30);
+  </script>
+ </body>
+</html>

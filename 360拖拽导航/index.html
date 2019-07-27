@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style type="text/css">
+	body,ul{
+		margin:0;
+		padding:0;
+	}
+	.nav{
+		width:640px;
+		height:400px;
+		margin:100px auto;
+		border:1px solid #000;
+	}
+	ul{
+		width:100%;
+		height:100%;
+	}
+	li{
+		width:200px;
+		height:120px;
+		list-style:none;
+		float:left;
+		margin:10px 0 0 10px;
+	}
+	li>img{
+		width:100%;
+		height:100%;
+		border-radius:5px;
+	}
+  </style>
+ </head>
+ <body>
+  <div class="nav">
+	<ul>
+		<li>
+			<img src="./img/360.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/360game.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/fenghuan.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/renren.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/souhu.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/taobao.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/wangyi.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/xinlan.png" alt="" draggable="false" />
+		</li>
+		<li>
+			<img src="./img/youku.png" alt="" draggable="false" />
+		</li>
+	</ul>
+  </div>
+  <script type="text/javascript">
+		var oLis = document.querySelectorAll("li");
+		var oNav = document.querySelector(".nav");
+		var array = [];
+		Array.prototype.forEach.call(oLis,Position);
+		//将浮动改为定位
+		function Position(el,index,self){
+			var left = el.offsetLeft;
+			var top = el.offsetTop;
+			array.push([left,top]);
+			setTimeout(function(){
+				el.style.position = "absolute";
+			},0);
+			//设置定位位置
+			el.style.left = array[index][0] - 10 + 'px';
+			el.style.top = array[index][1] - 10 + 'px';
+		};
+		//监听鼠标按下  鼠标移动 鼠标抬起事件
+		oNav.addEventListener("mousedown",drag);
+		document.addEventListener("mousemove",drag);
+		document.addEventListener("mouseup",drag);
+		//判断是否按下鼠标
+		var real = false;
+		//初始值
+		var data = {
+			x : 0,
+			y : 0,
+			startX : 0,
+			startY : 0,
+			ele : null,
+			zIndex : 1,
+			success : null
+		}
+		function drag(){
+			var ev = window.event || ev;
+			switch(ev.type){
+				case "mousedown":
+					if(ev.target.parentNode.nodeName === "LI"){
+						real = true;
+						data.ele = ev.target.parentNode;
+						data.ele.style.zIndex = data.zIndex++;
+						//获取鼠标点击得位置
+						data.x = ev.clientX;
+						data.y = ev.clientY;
+						//获取元素得旧位置
+						data.startX = data.ele.offsetLeft;
+						data.startY = data.ele.offsetTop;
+					}
+					break;
+				case "mousemove":
+					if(real){
+						//获取鼠标移动得位置
+						var x1 = ev.clientX;
+						var y1 = ev.clientY;
+						//计算新的位置
+						var endx = data.startX + x1 - data.x;
+						var endy = data.startY + y1 - data.y;
+						//设置元素的新位置
+						data.ele.style.top = endy + 'px';
+						data.ele.style.left = endx + 'px';
+						for(var i=0;i<oLis.length;i++){
+							oLis[i].style.transform = "";
+							//判断是否碰撞成功
+							if(
+								data.ele != oLis[i]&&
+								x1 > oLis[i].offsetLeft&&
+								x1 < oLis[i].offsetLeft + 200&&
+								y1 > oLis[i].offsetTop&&
+								y1 < oLis[i].offsetTop + 120
+							){
+								data.success = oLis[i];
+								data.success.style.transform = "scale(1.1)";
+							}
+						};
+					};
+					break;
+				case "mouseup":
+					real = false;
+					//如果碰撞成功交换位置，否则回到原来的位置
+					if(data.success){
+						data.ele.style.top = data.success.offsetTop - 10 + 'px';
+						data.ele.style.left = data.success.offsetLeft - 10 + 'px';
+						data.success.style.top = data.startY - 10 + 'px';
+						data.success.style.left = data.startX - 10 + 'px';
+						data.success.style.transform = "";
+						data.success = null;
+					}else{
+						data.ele.style.top = data.startY - 10 + 'px';
+						data.ele.style.left = data.startX - 10 + 'px';
+					}
+					break;
+			}
+		};
+  </script>
+ </body>
+</html>

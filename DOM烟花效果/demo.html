@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>document</title>
+  <style>
+  *{
+	margin:0px;
+	padding:0px;
+  }
+  html{
+	height:100%;
+  }
+  body{
+	  height:100%;
+	  background:#000;
+	  overflow:hidden;
+  }
+  .yanhua{
+	  width:10px;
+	  height:50px;
+	  background:red;
+	  border-radius:50px;
+	  position:absolute;
+  }
+  .fire{
+	width:10px;
+	height:10px;
+	background:#66ff99;
+	position:absolute;
+	border-radius:50%;
+  }
+  </style>
+ </head>
+ <body>
+	<!--javaScript    DOM编程艺术-->
+  <script>
+	var time=null;
+	var colors=["#ffcc66","#6666cc","#33ff00","#0099ff","#ff33cc","#339933","#333366","#660000","#ff0000","#6600cc","#ccff00","#cc0066","#339933","#00ffff","#cc0000","#663399","#cc0099","#ccff00"]
+	//for(var i=0;i<colors.length;i++){
+		
+	//}
+	document.onclick = function(e){
+		//alert("1");
+		var e=e||window.event;
+		var x=e.clientX;
+			y=e.clientY;
+		var h=document.body.clientHeight;
+		var odiv = document.createElement("div");//创建div元素
+		odiv.className="yanhua";
+		odiv.style.left=x+"px";//设置div的 left值
+		odiv.style.top=h+"px";
+		var colo=Math.floor(Math.random()*colors.length);
+		odiv.style.background=colors[colo];
+		document.body.appendChild(odiv);
+		var spend=10;
+		time=setInterval(function(){
+			odiv.style.top=odiv.offsetTop-spend+"px";
+			if(odiv.offsetTop<=y){
+				odiv.style.top=y+"px";
+				clearInterval(time);//清楚定时器
+				document.body.removeChild(odiv);//清除div元素
+				creat(x,y);
+			}
+		},1000/60);
+		//console.log(time);
+		function creat(x,y){
+			var n=Math.ceil(Math.random()*50+50);//生成50-100的随机数
+			var fill=[];
+			console.log(fill);
+			for(var i=0;i<n;i++){
+				fill[i]=document.createElement("div");
+				fill[i].className="fire";
+				fill[i].style.left=x+'px';
+				fill[i].style.top=y+'px';
+				fill[i].speedx=Math.random()*20-10;
+				fill[i].speedy=Math.random()*20-10;
+				document.body.appendChild(fill[i]);
+				var colo=Math.floor(Math.random()*colors.length);
+				fill[i].style.background=colors[colo];	
+			};
+			setInterval(function(){
+				for(var i=0;i<n;i++){
+					fill[i].style.left=fill[i].offsetLeft+fill[i].speedx+'px';
+					fill[i].style.top=fill[i].offsetTop+fill[i].speedy+'px';
+					fill[i].speedy+=0.5;
+					if(fill[i].offsetTop>h||fill[i].offsetLeft<0||fill[i].offsetLeft>document.body.clientWidth){
+						document.body.removeChild(fill[i]);
+					};
+				};
+			},30);
+		};
+	};
+  </script>
+ </body>
+</html>

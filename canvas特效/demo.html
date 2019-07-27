@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style type="text/css">
+	*{
+		margin:0;
+		padding:0;
+	}
+  </style>
+ </head>
+ <body>
+  <canvas id="canvas">你的浏览器可能不支持此方法，请更新</canvas>
+  <script type="text/javascript">
+	var canvas = document.getElementById("canvas");
+	var color = ["#66ff99","#66cc33","#66ffff","#ff66cc","#ffffcc","#ff00ff","#ff6600"];
+	var w = window.innerWidth,//获取浏览器的宽度
+		h = window.innerHeight;//获取浏览器的高度
+	canvas.width = w;
+	canvas.height = h;
+	var ctx = canvas.getContext("2d");//定义2d环境
+	function Boll(){};
+	//原型
+	Boll.prototype = {
+		//初始化属性
+		init : function(){
+			this.x = random(0,w);
+			this.y = random(0,h);
+			this.r = random(1,5);
+			this.color = color[Math.floor(Math.random()*7)];
+			this.vx = random(-1,1);
+			this.vy = random(-1,1);
+			this.D = 40;
+			//console.log(this.r);
+		},
+		//绘制
+		draw : function(){
+			ctx.beginPath();//开始路径
+			ctx.fillStyle = this.color;//颜色
+			ctx.arc(this.x,this.y,this.r,0,Math.PI*2,true);//绘制圆
+			ctx.fill();//调用填充方法
+		},
+
+		//更新坐标
+		update : function(){
+			this.x += this.vx;
+			this.y += this.vy;
+			//当小圆碰撞到浏览器边界的时候速度取反
+			if(this.x + this.r>w || this.x-this.r<0){
+				this.vx = -this.vx;
+			};
+			if(this.y-this.r<0 || this.y+this.r>h){
+				this.vy = -this.vy;
+			};
+			//判断当前圆于鼠标的位置差
+			this.xD = (positionX - this.x)<0 ? -(positionX - this.x) : (positionX - this.x);
+			this.yD = (positionY - this.y)<0 ? -(positionY - this.y) : (positionY - this.y);
+			//当鼠标移动到圆周围的时候，放大圆
+			if(this.xD<this.D && this.yD<this.D && this.r<70){
+				this.r += 3;
+			}else if(this.r>5 && this.xD>this.D && this.yD>this.D){
+				this.r -= 3;
+			};
+			this.draw();
+			//console.log(this.xD);
+		},
+	};
+	//随机函数
+	function random(min,max){
+		return Math.random()*(max-min)+min;
+	};
+	var array = [];
+	function protract(){
+		var boll = new Boll();
+		boll.init();
+		boll.draw();
+		array.push(boll);
+	};
+	for(var i=0;i<1200;i++){
+		protract();
+	}
+	//定时器
+	setInterval(function(){
+		ctx.clearRect(0,0,w,h);
+		for(var j of array){
+			j.update();
+		}
+	},1000/60);
+	var positionX,positionY;
+	document.addEventListener("mousemove",function(e){
+		var ev = window.event || e;//获取鼠标位置
+		positionX = ev.clientX;
+		positionY = ev.clientY;
+	},false);
+  </script>
+ </body>
+</html>

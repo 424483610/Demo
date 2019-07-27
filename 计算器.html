@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style>
+	body,ul{
+		margin:0;
+		padding:0;
+	}
+	.box{
+		width:404px;
+		height:440px;
+		margin:100px auto;
+		border-right:1px solid #666;
+	}
+	li{
+		list-style:none;
+		width:100px;
+		height:100px;
+		float:left;
+		border-left:1px solid #666;
+		border-bottom:1px solid #666;
+		text-align:center;
+		line-height:100px;
+		font-weight:bold;
+		cursor:pointer;
+	}
+	li:hover{
+		background-color:blue;
+		color:#fff;
+	}
+	input{
+		width:400px;
+		height:30px;
+		text-align:right;
+		font-size:24px;
+		font-weight:blod;
+	}
+  </style>
+ </head>
+ <body>
+  <div class="box">
+	<input type="text" value="0" id="txt" />
+  	<ul>
+  		<li>7</li>
+  		<li>8</li>
+  		<li>9</li>
+  		<li>+</li>
+  		<li>4</li>
+  		<li>5</li>
+  		<li>6</li>
+  		<li>-</li>
+  		<li>1</li>
+  		<li>2</li>
+  		<li>3</li>
+  		<li>*</li>
+  		<li>0</li>
+		<li>/</li>
+  		<li>.</li>
+		<li>=</li>
+  	</ul>
+  </div>
+  <script type="text/javascript">
+	//取JavaScript设计模式 -----  张容铭
+    function add(ele,type,fn){
+		if(ele.addEventListener){
+			ele.addEventListener(type,fn);
+		}else if(ele.attachEvent){
+			ele.attachEvent('on' + type,fn);
+		}else{
+			ele['on' + type] = fn;
+		}
+		return this;
+	}
+	var oLi = document.querySelectorAll("li");
+	var input = document.querySelector("input");
+	var data = {
+		on : true,
+		opr : "",
+		num1 : "",
+		num2 : "",
+		a : true
+	}
+	/*Array.prototype.forEach.call(oLi,function(el,index,self){
+		el.onclick = say;
+	});*/
+	for(var i in oLi){
+		add(oLi[i],'click',say)
+	}
+	function say(){
+		var inner = this.innerHTML;
+		if(typeof(inner) === "undefined") alert("你的浏览器不支持此功能，请更新!");
+		//console.log(inner);
+		switch(inner){
+			case "=":
+				fourOperations.beEqualTo();
+				break;
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+				fourOperations.operator(inner);
+				break;
+			default:
+				fourOperations.other(inner);
+				break;
+		};
+	};
+	var fourOperations = {
+		operator : function(inner){
+			if(data.a){
+				if(data.num1.length != 0){
+					data.num2 = input.value;
+					input.value = connt();
+					data.num1 = "";
+				}
+				data.num1 = input.value;//第一次输入
+				data.opr = inner;
+				//console.log(opr);
+				data.on = true;
+				data.a = false;
+			};
+		},
+		beEqualTo : function(){
+			data.num2 = input.value;//保存第二个值
+			input.value = connt();
+			data.num1 = "";
+			data.on = true;
+		},
+		other : function(inner){
+			if(data.on){
+				input.value = inner;
+				data.on = false;
+				data.a = true;
+			}else{
+				input.value += inner;
+			}
+		}
+	};
+	//计算函数
+	function connt(){
+		var require = 0;
+		switch(data.opr){
+			case "+":
+				require = data.num1*1 + data.num2*1;
+				break;
+			case "-":
+				require = data.num1*1 - data.num2*1;
+				break;
+			case "*":
+				require = data.num1*1 * data.num2*1;
+				break;
+			case "/":
+				require = data.num1*1 / data.num2*1;
+				break;
+			default:
+				require = data.num2;
+				break;
+		}
+		return require;
+	};
+  </script>
+ </body>
+</html>

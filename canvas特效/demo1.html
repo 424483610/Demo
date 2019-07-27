@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style>
+  *{
+  margin:0px;
+  padding:0px;
+  }
+  #canvas{
+  background:#000;
+  }
+  </style>
+ </head>
+ <body>
+	<!--画布-->
+  <canvas id="canvas">你的浏览器去不支持canvas标签,请更新浏览器</canvas>
+  <script type="text/javascript">
+  //获取元素
+	var canvas = document.getElementById("canvas");
+	//创建2d环境
+	var ctx = canvas.getContext("2d");
+	//获取浏览器的宽度
+	var W = window.innerWidth;
+	//获取浏览器的高度
+		H = window.innerHeight;
+	//设置画布的宽
+	canvas.width = W;
+	//设置画布的高
+	canvas.height = H;
+	//创建数组对象
+	var proson = new Array;
+	//初始化雨滴个数
+	var amount = 70;
+	//雨滴的基本属性
+	function boll(){
+		this.x = random(0,W);
+		this.y = 0;
+		this.r = 2;
+		this.ground = random(H*0.8,H*0.9);
+		this.speed = random(1,7);
+		this.vr = 1;
+		this.a = 1;
+		this.va = 0.96;
+	};
+	//循环创建对象
+	for(var i=0;i<amount;i++){
+		proson.push(new boll());
+	};
+	console.log(proson);
+	//绘制雨滴
+	function drew(){
+		//ctx.clearRect(0,0,W,H);
+		//创建一个透明层
+		ctx.fillStyle = "rgba(0,0,0,0.1)";
+		//透明层的宽高
+		ctx.fillRect(0,0,W,H);
+		//遍历数组
+		for(var i=0;i<proson.length;i++){
+			//判断雨滴的位置，即是否掉在浏览器底部 
+			if(proson[i].y>proson[i].ground){
+				//开始路径
+				ctx.beginPath();
+				//颜色
+				ctx.strokeStyle="rgba(0,255,255,"+proson[i].a+")";
+				//绘制圆形
+				ctx.arc(proson[i].x,proson[i].y,proson[i].r,0,Math.PI*2,true);
+				//调用方法
+				ctx.stroke();
+			//如果未掉到底部   则绘制矩形
+			}else{
+				//开始路径
+				ctx.beginPath();
+				//颜色
+				ctx.fillStyle = "#00ffff";
+				//绘制矩形
+				ctx.fillRect(proson[i].x,proson[i].y,3,10);
+				//调用方法
+				ctx.fill();
+			}
+		};
+	};
+	//更新坐标
+	function update(){
+		//遍历数组
+		for(var i=0;i<proson.length;i++){
+			//判断雨滴位置
+			if(proson[i].y<proson[i].ground){
+				proson[i].y+=proson[i].speed;
+			}else{
+				//判断圆的透明度   
+				if(proson[i].a>0.03){
+					proson[i].r+=proson[i].vr;
+					if(proson[i].r>50){
+						proson[i].a*=proson[i].va;
+					}
+					//重新初始化雨滴
+				}else{
+					proson[i].y=0;
+					proson[i].a=1;
+					proson[i].r=2;
+				}
+			}
+		};
+		drew();
+		//console.log(this.a);
+	};
+	//封装随机函数  返回函数外
+	function random(min,max){
+		return Math.random()*(max-min)+min;
+	};
+	//调用定时器
+	setInterval(update,30);
+  </script>
+ </body>
+</html>

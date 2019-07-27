@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style type="text/css">
+	*{
+		margin:0;
+		padding:0;
+	}
+	.box{
+		width:1000px;
+		height:200px;
+		margin:0 auto;
+	}
+	.box .score{
+		width:100%;
+		height:40px;
+		font-weight:bold;
+		line-height:40px;
+	}
+	.box .present{
+		width:100%;
+		height:80px;
+		background:#ccc;
+		color:red;
+	}
+	.box .content{
+		width:100%;
+		height:80px;
+		line-height: 80px;
+		font-weight: bold;
+		font-size: 20px;
+		letter-spacing:30px;
+		background-color:#ccc;
+		display:none;
+	}
+	.box input{
+		height:30px;
+		margin-top:30px;
+	}
+	#txt{
+		width:60%;
+	}
+	.start,.recur{
+		display:block;
+		width:120px;
+		height:40px;
+		text-align:center;
+		background-color:blue;
+		float:right;
+		border-radius:10px;
+		cursor:pointer;
+		color:#fff;
+	}
+  </style>
+ </head>
+ <body>
+ 	<div class="box">
+ 		<div class="score">
+			<span class="score-a"></span>
+			<span class="start">开始游戏</span>
+			<span class="recur" style="background-color:yellow;color:#666">重新开始</span>
+ 		</div>
+ 		<div class="present">
+			<span>这是一款记忆游戏，游戏开始将会在屏幕上显示一串数字，你必须记住那一串数字，3秒后数字会消失，请在下面输入你所看到的数字，注意：得分越多，显示时间将会越短-------低调小熊猫</span>
+ 		</div>
+ 		<div class="content"></div>
+		<input type="text" value="" id="txt" placeholder="请输入您看到数字" />
+		<input type="button" value="确定" id="btn" />
+ 	</div>
+ 	<script>
+ 		var oBtn = document.querySelector("#btn");
+ 		var oTxt = document.querySelector("#txt");
+ 		var start = document.querySelector(".box .start");
+ 		var content = document.querySelector(".box .content");
+ 		var present = document.querySelector(".box .present");
+ 		var score_a = document.querySelector(".box .score .score-a");
+ 		var s=-1;
+ 		var random="";
+ 		var time = 3200;
+ 		var y = true;
+ 		start.addEventListener("click",function(e){
+ 			if(y){
+	 			alert("准备好了吗？\n游戏开始");
+	 			number();
+	 			present.style.display = "none";
+	 			content.style.display = "block";
+	 			y = false;
+ 			}
+ 			/*if(e.target.className == "recur"){
+ 				window.location.reload();
+ 			}*/
+ 			return false;
+ 		},false);
+ 		function number(){
+ 			time -= 200;
+ 			console.log(time);
+			for(var i=0;i<8;i++){ 
+				random += Math.ceil(Math.random()*10); 
+			};
+			content.innerHTML = random;
+			setTimeout(function(){
+				content.innerHTML = "";
+			},time);
+ 		};
+ 		oBtn.onclick = function(){
+ 			var value = oTxt.value;
+ 			if(value == random){
+ 				random = "";
+ 				content.innerHTML = "";
+ 				content.innerHTML = "回答正确";
+ 				setTimeout(function(){
+ 					content.innerHTML = "";
+ 					number();
+ 					account();
+ 				},500);
+ 			}else{
+ 				alert("回答错误，游戏结束");
+ 				content.innerHTML = "回答错误,游戏结束";
+ 				score_a.innerHTML = "得分：0";
+ 				console.log(s);
+ 			};
+ 		};
+ 		function account(){
+ 			s++;
+ 			score_a.innerHTML = "得分："+s;
+ 		};
+ 		account();
+ 		var recur = document.querySelector(".box .recur");
+ 		recur.onclick = function(){
+ 			window.location.reload();
+ 		};
+ 	</script>
+ </body>
+</html>
+ 
